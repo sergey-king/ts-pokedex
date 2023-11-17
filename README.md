@@ -1,5 +1,8 @@
 # Pokedex - React Native Project
 
+https://github.com/sergey-king/ts-pokedex/assets/48575848/7490bc34-41dd-4e66-9a30-34bb00139623
+
+## Setup
 This project is bootstrapped with `npx create-expo-app -t expo-template-blank-typescript`. 
 For simplicity in testing, use the `Expo Go` client, but it can be modified to use EAS builds with development clients.
 The project uses the latest EXPO SDK, version 49.
