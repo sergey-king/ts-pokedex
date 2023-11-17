@@ -27,7 +27,7 @@ This project uses the newest Expo Router (next-generation file-based navigation 
 Redux with Redux Toolkit is used. This is the official Redux wrapper that simplifies most Redux tasks and eliminates a lot of boilerplate code (https://redux.js.org/introduction/why-rtk-is-redux-today).
 
 ## Data Fetching
-RTK Query is employed. Similar to React Query but made to work with Redux/RTK (https://redux-toolkit.js.org/rtk-query/overview).
+RTK Query is employed. Similar to React Query but made to work with Redux/RTK (https://redux-toolkit.js.org/rtk-query/overview). This provides both data fetching and caching.
 
 ## Code Quality 
 - eslint

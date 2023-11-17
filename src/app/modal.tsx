@@ -1,39 +1,21 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { EvolutionChain } from "pokenode-ts";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import { PokemonCard } from "../components/PokemonCard";
 import { ScrollView, Text, View } from "../components/Themed";
-import { useLazyGetEvolutionByIdQuery } from "../redux/slices/api";
+import { useGetEvolutionByIdQuery } from "../redux/slices/api";
 import { RootState } from "../redux/store";
 
 export default function ModalScreen() {
     const router = useRouter();
     const params = useLocalSearchParams();
 
-    const [evolutionChain, setEvolutionChain] = useState<EvolutionChain>();
-
     const searchHistory = useSelector((state: RootState) => state.searchHistory.searchValues);
     const result = useMemo(() => searchHistory.find((item) => item.searchValue === params.searchName), [params.searchName, searchHistory]);
 
-    const [getLazyEvolutionByIdQuery] = useLazyGetEvolutionByIdQuery();
-
-    useEffect(() => {
-        const bootstrapAsync = async () => {
-            if (result) {
-                try {
-                    const queryResult = await getLazyEvolutionByIdQuery(result.searchResult.id).unwrap();
-                    setEvolutionChain(queryResult);
-                } catch (error) {
-                    __DEV__ && console.log(error);
-                }
-            }
-        };
-
-        bootstrapAsync();
-    }, [getLazyEvolutionByIdQuery, result]);
+    const { data: evolutionChain, isLoading } = useGetEvolutionByIdQuery(result?.searchResult.id ?? 0, { skip: !result?.searchResult.id });
 
     const handleOnEvolutionChainPress = useCallback(() => {
         router.back();
@@ -49,7 +31,10 @@ export default function ModalScreen() {
 
             <View style={styles.divider} />
             <Text style={styles.titleText}>Evolution Details</Text>
-            {evolutionChain?.chain.species.name ? (
+
+            {isLoading ? (
+                <Text>Loading Evolution Data...</Text>
+            ) : evolutionChain?.chain.species.name ? (
                 <React.Fragment>
                     <Text>The Pokémon species at this point in the evolution chain</Text>
                     <Text style={styles.linkText} onPress={handleOnEvolutionChainPress}>
@@ -80,6 +65,6 @@ const styles = StyleSheet.create({
         marginVertical: 8,
     },
     linkText: {
-        color: "#147efb"
-    }
+        color: "#147efb",
+    },
 });
